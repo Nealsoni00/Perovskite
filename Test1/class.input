@@ -1,5 +1,5 @@
 
-units lj 
+units lj
 boundary p p p
 atom_style bond
 
@@ -8,7 +8,7 @@ read_data lammps_input.txt
 mass * 1.0
 
 pair_style lj/cut 2.5
-pair_coeff * * 1.0 1.0 2.5    
+pair_coeff * * 1.0 1.0 2.5
 bond_style fene
 bond_coeff 1 30.0 1.5 1.0 1.0
 
@@ -16,11 +16,11 @@ bond_coeff 1 30.0 1.5 1.0 1.0
 #fix 1 all nvt temp 1.0 1.0 0.5
 fix 2 all npt iso 0.5 0.5 1 temp 1.0 1.0 0.5
 neigh_modify every 1 delay 0
-timestep 0.005
+timestep 0.0001
 
-group chain type 2 
-group solvents type 1 
-dump 1 chain custom 10000 A.lammpstrj id mol type x y z 
+group chain type 2
+group solvents type 1
+dump 1 chain custom 10000 A.lammpstrj id mol type x y z
 dump 2 solvents custom 10000 B.lammpstrj id mol type x y z
 thermo 1000
-run 1000000
+run 10000000
