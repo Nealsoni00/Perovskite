@@ -1,0 +1,122 @@
+LAMMPS (31 Mar 2017)
+# Find minimum energy fcc configuration
+# Mark Tschopp, 2010
+# This requires the variable latconst to be input via the command line
+# e.g., lmp_win_no-mpi -var latconst 4 < calc_fcc_ver1.in
+
+# ---------- Initialize Simulation ---------------------
+clear
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map array
+
+variable latconst equal 4.0
+
+# ---------- Create Atoms ---------------------
+lattice 	fcc ${latconst}
+lattice 	fcc 4
+Lattice spacing in x,y,z = 4 4 4
+region	box block 0 1 0 1 0 1 units lattice
+create_box	1 box
+Created orthogonal box = (0 0 0) to (4 4 4)
+  1 by 1 by 1 MPI processor grid
+
+lattice	fcc ${latconst} orient x 1 0 0 orient y 0 1 0 orient z 0 0 1
+lattice	fcc 4 orient x 1 0 0 orient y 0 1 0 orient z 0 0 1
+Lattice spacing in x,y,z = 4 4 4
+create_atoms 1 box
+Created 4 atoms
+replicate 100 100 100
+  orthogonal box = (0 0 0) to (400 400 400)
+  1 by 1 by 1 MPI processor grid
+  4000000 atoms
+
+# ---------- Define Interatomic Potential ---------------------
+pair_style eam/alloy
+pair_coeff * * Al99.eam.alloy Al
+neighbor 2.0 bin
+neigh_modify delay 10 check yes
+
+# ---------- Define Settings ---------------------
+compute eng all pe/atom
+compute eatoms all reduce sum c_eng
+
+# ---------- Run Minimization ---------------------
+reset_timestep 0
+fix 1 all box/relax iso 0.0 vmax 0.001
+thermo 10
+thermo_style custom step pe lx ly lz press pxx pyy pzz c_eatoms
+min_style cg
+minimize 1e-25 1e-25 5000 10000
+WARNING: Resetting reneighboring criteria during minimization (../min.cpp:168)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 8.28721
+  ghost atom cutoff = 8.28721
+  binsize = 4.1436, bins = 97 97 97
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 2298 | 2298 | 2298 Mbytes
+Step PotEng Lx Ly Lz Press Pxx Pyy Pzz c_eatoms 
+       0    -13417787          400          400          400     29590.11     29590.11     29590.11     29590.11    -13417787 
+      10    -13439104          404          404          404    5853.9553    5853.9553    5853.9553    5853.9553    -13439104 
+      17    -13440000    405.00047    405.00047    405.00047 0.0043514781 0.0043515046 0.0043515094 0.0043514202    -13440000 
+Loop time of 736.95 on 1 procs for 17 steps with 4000000 atoms
+
+98.0% CPU use with 1 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+        -13417787.3207     -13439999.9953     -13439999.9953
+  Force two-norm initial, final = 3.54599e+06 0.534587
+  Force max component initial, final = 3.54599e+06 0.534587
+  Final line search alpha, max atom move = 2.85431e-08 1.52588e-08
+  Iterations, force evaluations = 17 99
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 669.07     | 669.07     | 669.07     |   0.0 | 90.79
+Neigh   | 50.398     | 50.398     | 50.398     |   0.0 |  6.84
+Comm    | 1.9439     | 1.9439     | 1.9439     |   0.0 |  0.26
+Output  | 0.048706   | 0.048706   | 0.048706   |   0.0 |  0.01
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 15.49      |            |       |  2.10
+
+Nlocal:    4e+06 ave 4e+06 max 4e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    564665 ave 564665 max 564665 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    2.8e+08 ave 2.8e+08 max 2.8e+08 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 280000000
+Ave neighs/atom = 70
+Neighbor list builds = 9
+Dangerous builds = 0
+
+variable natoms equal "count(all)"
+variable teng equal "c_eatoms"
+variable length equal "lx"
+variable ecoh equal "v_teng/v_natoms"
+
+print "Total energy (eV) = ${teng};"
+Total energy (eV) = -13439999.9529038;
+print "Number of atoms = ${natoms};"
+Number of atoms = 4000000;
+print "Lattice constant (Angstoms) = ${length};"
+Lattice constant (Angstoms) = 405.000465434625;
+print "Cohesive energy (eV) = ${ecoh};"
+Cohesive energy (eV) = -3.35999998822595;
+
+print "All done!"
+All done!
+Total wall time: 0:12:33
