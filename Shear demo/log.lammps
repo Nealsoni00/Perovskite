@@ -1,0 +1,40 @@
+LAMMPS (31 Mar 2017)
+# 2d friction simulation
+
+dimension	2
+boundary	p s p
+
+atom_style	atomic
+neighbor	0.3 bin
+neigh_modify	delay 5
+
+# create geometry
+
+lattice		hex 0.9
+Lattice spacing in x,y,z = 1.1327 1.96189 1.1327
+region		box block 0 50 0 22 -0.25 0.25
+create_box	4 box
+Created orthogonal box = (0 0 -0.283174) to (56.6348 43.1615 0.283174)
+  1 by 1 by 1 MPI processor grid
+
+mass		1 1.0
+mass		2 1.0
+mass		3 1.0
+mass		4 1.0
+
+# atom regions
+
+region          lo-fixed block INF INF INF 1.1 INF INF
+region          lo-slab block INF INF INF 7 INF INF
+region          above-lo block INF INF INF 7 INF INF side out
+region          hi-fixed block INF INF 20.9 INF INF INF
+region          hi-slab block INF INF 15 INF INF INF
+region          below-hi block INF INF 15 INF INF INF side out
+region		lo-asperity sphere 32 7 0 8
+region		hi-asperity sphere 18 15 0 8
+
+# create 2 surfaces with asperities
+
+create_atoms	1 lo-slab
+ERROR: Illegal create_atoms command (../create_atoms.cpp:102)
+Last command: create_atoms	1 lo-slab

@@ -1,0 +1,13 @@
+
+
+# ------------------------ INITIALIZATION ----------------------------
+units 		metal
+dimension	3
+boundary	p	p	p
+atom_style	atomic
+
+
+
+
+read_data atoms.data
+read_data bonds.data
