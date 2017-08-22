@@ -604,40 +604,38 @@ PLA10 = [358310.249
 
 
 
-pd_Control = fitdist(Control,'Weibull');
-Control_pdf = (0:0.1:1000000);
+pd_Control = fitdist(Control,'Weibull')
+Control_pdf = [0:0.1:1000000];
 y_Control = pdf(pd_Control,Control_pdf);
 scale_Control = 1/max(y_Control);
-line = plot((Control_pdf),(y_Control.*scale_Control),'k'); % change color every line 
+line = plot((Control_pdf),(y_Control.*scale_Control),'k') % change color every line 
 
 hold on 
 
-pd_PLA01 = fitdist(PLA01,'Weibull');
+pd_PLA01 = fitdist(PLA01,'Weibull')
 disp(paramci(pd_PLA01));
-PLA01_pdf = (0:0.1:1000000);
+PLA01_pdf = [0:0.1:1000000];
 y_PLA01 = pdf(pd_PLA01,PLA01_pdf);
 scale_PLA01 = 1/max(y_Control);
-line1 = plot((PLA01_pdf),(y_PLA01.*scale_PLA01),'b'); % change color every line 
+line1 = plot((PLA01_pdf),(y_PLA01.*scale_PLA01),'b') % change color every line 
 
-pd_PLA03 = fitdist(PLA03,'Weibull');
-PLA03_pdf = (0:0.1:1000000);
+pd_PLA03 = fitdist(PLA03,'Weibull')
+PLA03_pdf = [0:0.1:1000000];
 y_PLA03 = pdf(pd_PLA03,PLA03_pdf);
 scale_PLA03 = 1/max(y_Control);
-line2 = plot((PLA03_pdf),(y_PLA03.*scale_PLA03),'g'); % change color every line 
+line2 = plot((PLA03_pdf),(y_PLA03.*scale_PLA03),'g') % change color every line 
 
-pd_PLA06 = fitdist(PLA06,'Weibull');
-PLA06_pdf = (0:0.1:1000000);
+pd_PLA06 = fitdist(PLA06,'Weibull')
+PLA06_pdf = [0:0.1:1000000];
 y_PLA06 = pdf(pd_PLA06,PLA06_pdf);
 scale_PLA06 = 1/max(y_Control);
-line3 = plot((PLA06_pdf),(y_PLA06.*scale_PLA06),'Color',[1 .5 0]); % change color every line 
+line3 = plot((PLA06_pdf),(y_PLA06.*scale_PLA06),'Color',[1 .5 0]) % change color every line 
 
-pd_PLA10 = fitdist(PLA10,'Weibull');
-PLA10_pdf = (0:0.1:1000000);
+pd_PLA10 = fitdist(PLA10,'Weibull')
+PLA10_pdf = [0:0.1:1000 000];
 y_PLA10 = pdf(pd_PLA10,PLA10_pdf);
 scale_PLA10 = 1/max(y_Control);
-line4 = plot((PLA10_pdf),(y_PLA10.*scale_PLA10),'r'); % change color every line 
-
-plot([400000,400000],[0,1], '--', 'LineWidth',2, 'Color', 'k')
+line4 = plot((PLA10_pdf),(y_PLA10.*scale_PLA10),'r') % change color every line 
 
 set(gca,'fontsize',20)
 
@@ -653,23 +651,21 @@ ylim([0 1])
 set(xlabel('Grain Surface Area (nm^2)'),'FontSize',20)
 set(ylabel('Probability Density'),'FontSize',20)
 set(title('Weibull Distribution Curves of PLA-enhanced MAPbI_3'),'FontSize',25)
-%set(title({'Weibull Distribution Curves of', 'PLA-enhanced MAPbI_3'}),'FontSize',25)
 
-lng = legend('Control', 'PLA 0.1 mg/mL', 'PLA 0.3 mg/mL', 'PLA 0.6 mg/mL', 'PLA 1.0 mg/mL','400k Grain Size');
+lng = legend('Control', 'PLA 0.1 mg/mL', 'PLA 0.3 mg/mL', 'PLA 0.6 mg/mL', 'PLA 1.0 mg/mL')
 lng.FontSize = 20;
-lng = legend('boxoff')
-lng = legend('Location','northeast')
 
-wblControl = 1-wblcdf(400000,78715.9,1.34458);
-wblPLA01   = 1-wblcdf(400000,107897,1.22751);
-wblPLA03   = 1-wblcdf(400000,128986,1.20342);
-wblPLA06   = 1-wblcdf(400000,158990,1.19642);
-wblPLA10   = 1-wblcdf(400000,239258,1.10203);
+
+Control  = 1-wblcdf(400000,78715.9,1.34458)
+wblPLA01 = 1-wblcdf(400000,107897,1.22751)
+wblPLA03 = 1-wblcdf(400000,128986,1.20342)
+wblPLA06 = 1-wblcdf(400000,158990,1.19642)
+wblPLA10 = 1-wblcdf(400000,239258,1.10203)
 
 %text(.5,300,, 'fontsize', 20);
 
 
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [ 0  0  10  7];
+fig.PaperPosition = [ 0  0 16 10 ];
 print('PLA_Dist_Curves','-dpng','-r0')

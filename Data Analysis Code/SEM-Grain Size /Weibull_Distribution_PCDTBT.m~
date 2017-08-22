@@ -855,14 +855,13 @@ y_Control = pdf(pd_Control,Control_pdf);
 scale_Control = 1/max(y_PCDTBT10);
 line = plot((Control_pdf),(y_Control.*scale_Control),'k'); % change color every line 
 
-wblX = 400000
-wblControl    = 1-wblcdf(wblX,78715.9,1.34458);
-wblPCDTBT01   = 1-wblcdf(wblX,70028.1,1.17162);
-wblPCDTBT03   = 1-wblcdf(wblX,80647.8,1.39366);
-wblPCDTBT06   = 1-wblcdf(wblX,33953,1.53955);
-wblPCDTBT10   = 1-wblcdf(wblX,18053.8,1.7727);
 
-plot([400000,400000],[0,1], '--', 'LineWidth',2, 'Color', 'k')
+wblControl    = 1-wblcdf(400000,78715.9,1.34458);
+wblPCDTBT01   = 1-wblcdf(400000,107897,1.22751);
+wblPCDTBT03   = 1-wblcdf(400000,128986,1.20342);
+wblPCDTBT06   = 1-wblcdf(400000,33953,1.53955);
+wblPCDTBT10   = 1-wblcdf(400000,18053.8,1.7727);
+
 
 set(gca,'fontsize',20)
 
@@ -879,12 +878,14 @@ set(xlabel('Grain Surface Area (nm^2)'),'FontSize',20)
 set(ylabel('Probability Density'),'FontSize',20)
 set(title('Weibull Distribution Curves of PCDTBT-enhanced MAPbI_3'),'FontSize',25)
 
-lng = legend('PCDTBT 1.0 mg/mL', 'PCDTBT 0.6 mg/mL', 'PCDTBT 0.3 mg/mL', 'PCDTBT 0.1 mg/mL', 'Control', '400k Grain Size')
-lng.FontSize = 20;
-lng = legend('boxoff')
-lng = legend('Location','northeast')
+lng = legend('PCDTBT 1.0 mg/mL', 'PCDTBT 0.6 mg/mL', 'PCDTBT 0.3 mg/mL', 'PCDTBT 0.1 mg/mL', 'Control')
+lng.FontSize = 15;
 
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [ 0  0  10  7];
+fig.PaperPosition = [ 0  0 12 10 ];
 print('PCDTBT_Dist_Curves','-dpng','-r0')
+
+
+
+
